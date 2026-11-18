@@ -65,29 +65,36 @@ export async function requestSerpApi(params: URLSearchParams, timeoutMs = 20_000
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
   let response: Response;
   try {
-    response = await fetch(url, {
-      method: "GET",
-      headers: { Accept: "application/json" },
-      signal: controller.signal,
-    });
-  } catch (error) {
-    if (error instanceof Error && error.name === "AbortError") throw new SerpApiTimeoutError();
-    throw new SerpApiRequestError(503);
+    try {
+      response = await fetch(url, {
+        method: "GET",
+        headers: { Accept: "application/json" },
+        signal: controller.signal,
+      });
+    } catch (error) {
+      if (controller.signal.aborted || (error instanceof Error && error.name === "AbortError")) {
+        throw new SerpApiTimeoutError();
+      }
+      throw new SerpApiRequestError(503);
+    }
+
+    let payload: Record<string, unknown>;
+    try {
+      const json: unknown = await response.json();
+      if (!isRecord(json)) throw new Error("Invalid JSON object");
+      payload = json;
+    } catch (error) {
+      if (controller.signal.aborted || (error instanceof Error && error.name === "AbortError")) {
+        throw new SerpApiTimeoutError();
+      }
+      throw new SerpApiRequestError(response.status >= 400 ? response.status : 502);
+    }
+
+    const metadata = isRecord(payload.search_metadata) ? payload.search_metadata : undefined;
+    const failed = !response.ok || Boolean(payload.error) || metadata?.status === "Error";
+    if (failed) throw new SerpApiRequestError(response.status >= 400 ? response.status : 502);
+    return payload;
   } finally {
     clearTimeout(timeout);
   }
-
-  let payload: Record<string, unknown>;
-  try {
-    const json: unknown = await response.json();
-    if (!isRecord(json)) throw new Error("Invalid JSON object");
-    payload = json;
-  } catch {
-    throw new SerpApiRequestError(response.status >= 400 ? response.status : 502);
-  }
-
-  const metadata = isRecord(payload.search_metadata) ? payload.search_metadata : undefined;
-  const failed = !response.ok || Boolean(payload.error) || metadata?.status === "Error";
-  if (failed) throw new SerpApiRequestError(response.status >= 400 ? response.status : 502);
-  return payload;
 }

@@ -31,3 +31,11 @@ Executar `pnpm check`, testes, build, health check e testes tRPC/live permitidos
 - Paleta: `#1764CE`, `#10366B`, `#EAF2FF` e branco; preservar o logo oficial PIPER enviado pelo usuário.
 - Manter layout e responsividade atuais; adicionar apenas controles necessários ao calendário/ofertas e remover rótulos antigos de fornecedor.
 - Feedback de carregamento, vazio e erro deve ser explícito e acessível, sem ocultar mensagens de fonte.
+
+## Atualização solicitada no site publicado — 18/11/2026
+
+A configuração protegida de SerpApi deve existir para desenvolvimento e produção; a chave foi fornecida na superfície segura e será lida apenas por processos de servidor. Reiniciar os serviços antigos para carregar o ambiente novo e validar chamadas reais limitadas dos fluxos existentes, distinguindo falhas de credencial, quotas e indisponibilidade upstream. Não criar outra integração de pagamento ou conversão sem provedor identificado.
+
+A hero usava uma URL `/manus-storage/` de outro projeto não disponível no site importado. Substituir por imagem de aviação gerada no projeto atual, como fotografia panorâmica full-bleed com avião, nuvens e litoral e overlay azul para contraste. Manter cores, logo e tipografia Piper. Reorganizar `.hero-copy` e `.hero-search` em fluxo normal para eliminar alturas fixas e deslocamentos negativos no mobile; texto e formulário devem permanecer visíveis e o restante da página seguir a altura real do conteúdo.
+
+Estrutura mantida: `client/src/pages/Home.tsx` e `client/src/index.css` para a página; `server/services` e `config/integrations` para APIs; configuração protegida e hosting no plano de configuração Webdev. O pedido de operação residente 24h depende do modo Reserved (`always_on`), com exigência de plano pago; nenhum gerador de tráfego será criado para contornar esse limite. Esta atualização pede correção do site, não habilita publicação automática permanente.

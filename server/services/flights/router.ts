@@ -49,7 +49,7 @@ const baseInput = z.object({
   if (value.tripType === "roundtrip" && !value.returnDate) {
     ctx.addIssue({ code: "custom", path: ["returnDate"], message: "Informe a data de volta para uma ida e volta." });
   }
-  if (value.returnDate && value.returnDate < value.departureDate) {
+  if (value.returnDate && value.returnDate <= value.departureDate) {
     ctx.addIssue({ code: "custom", path: ["returnDate"], message: "A volta precisa acontecer depois da ida." });
   }
   if (value.tripType === "multi") {

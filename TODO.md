@@ -65,3 +65,12 @@
 - [x] Preços continuam sendo apresentados em BRL conforme o valor retornado; não foi adicionada conversão cambial.
 - [x] Relatório detalhado registrado em [docs/UPDATE_REPORT.md](./docs/UPDATE_REPORT.md).
 - [ ] Repetir a pesquisa live em dispositivos móveis com `SERPAPI_API_KEY` disponível e créditos autorizados; fixtures locais não substituem essa validação.
+
+## Correção do site publicado — pedido atual de 18/11/2026
+- [x] Diagnosticar a SerpApi não configurada e cadastrar chave protegida em desenvolvimento/produção sem exposição no código.
+- [x] Ativar e verificar no backend as APIs existentes de voos, aeroportos, calendário, ofertas e Airbnb; preços e links devem vir de respostas reais. HTTP live: 5 aeroportos, 16 voos de ida, 31 datas de calendário, 30 ofertas, 18 hospedagens Airbnb e 20 voos de ida/volta. Opções de compra: 1 opção, nenhum link direto nesta resposta.
+- [x] Substituir a imagem inacessível da hero por paisagem de aviação do projeto atual e corrigir o enorme espaço vazio no celular, preservando a identidade Piper. Capturas 390×844 e 1440×1000 confirmaram texto/formulário e a nova imagem visíveis.
+- [x] Validar tipos, testes (21), build e HTTP. Versão pronta para salvar no repositório canônico; publicação solicitada em cartão separado, ainda não confirmada.
+- [x] Verificar o pedido de servidor residente 24h pelo hosting suportado. Reserved/always_on exige plano pago e a tentativa foi recusada com `requires_membership`; nenhum pinger foi criado. A operação residente 24h não está habilitada.
+- [x] Não afirmar que pagamentos, conversão de moeda ou analytics externo funcionam sem provedores/credenciais e implementação real. A reserva continua externa; esses módulos não foram ativados.
+- [ ] Publicar as correções no site existente somente se o usuário confirmar a republicação no cartão enviado.

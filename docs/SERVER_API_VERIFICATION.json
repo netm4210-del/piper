@@ -1,0 +1,105 @@
+{
+  "checkedAt": "2026-11-18T16:28:29.329Z",
+  "origin": "http://127.0.0.1:3000",
+  "departureDate": "2027-01-02",
+  "returnDate": "2027-01-06",
+  "policy": "Real HTTP/backend requests, no fixtures, no automatic retries, no reservations or payments. Counts reflect the actual response at this time.",
+  "previousAttemptCheckedAt": "2026-11-18T16:25:47.875Z",
+  "recoveryReason": "Development server hot reload interrupted the first HTTP attempt; preserved successful autocomplete/calendar checks. A new flight lookup is needed for an in-memory booking token.",
+  "results": [
+    {
+      "label": "health",
+      "status": "ok",
+      "durationMs": 41,
+      "serverStatus": "ok"
+    },
+    {
+      "label": "integration configuration",
+      "status": "ok",
+      "durationMs": 13,
+      "flightsConfigured": true,
+      "hotelsConfigured": true,
+      "checkoutEnabled": false,
+      "currencyConversionEnabled": false,
+      "externalAnalyticsEnabled": false
+    },
+    {
+      "label": "airport autocomplete",
+      "status": "ok",
+      "durationMs": 1990,
+      "count": 5,
+      "airportCodes": [
+        "GRU",
+        "CGH",
+        "VCP",
+        "MXQ",
+        "RTE"
+      ],
+      "preservedFrom": "2026-11-18T16:25:47.875Z"
+    },
+    {
+      "label": "one-way flights GRU-GIG",
+      "status": "ok",
+      "durationMs": 1462,
+      "count": 16,
+      "currencies": [
+        "BRL"
+      ],
+      "carriers": [
+        "LATAM",
+        "Gol",
+        "Aerolineas Argentinas"
+      ],
+      "bookingTokenCount": 16,
+      "sampleAmount": 486
+    },
+    {
+      "label": "price calendar GRU-GIG",
+      "status": "ok",
+      "durationMs": 2672,
+      "count": 31,
+      "currencies": [
+        "BRL"
+      ],
+      "preservedFrom": "2026-11-18T16:25:47.875Z"
+    },
+    {
+      "label": "flight deals from GRU",
+      "status": "ok",
+      "durationMs": 457,
+      "count": 30,
+      "currencies": [
+        "BRL"
+      ]
+    },
+    {
+      "label": "Airbnb Rio de Janeiro",
+      "status": "ok",
+      "durationMs": 1721,
+      "count": 18,
+      "currency": "BRL",
+      "genuineHttpsLinks": true,
+      "photosCount": 18
+    },
+    {
+      "label": "round-trip flights GRU-GIG",
+      "status": "ok",
+      "durationMs": 22777,
+      "count": 20,
+      "currencies": [
+        "BRL"
+      ],
+      "inboundCount": 20
+    },
+    {
+      "label": "booking options from returned flight token",
+      "status": "ok",
+      "durationMs": 18547,
+      "count": 1,
+      "currencies": [
+        "BRL"
+      ],
+      "linkCount": 0
+    }
+  ]
+}

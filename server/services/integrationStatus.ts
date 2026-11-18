@@ -2,12 +2,13 @@ import { analyticsConfig } from "../../config/integrations/analytics.config";
 import { currencyIntegrationConfig } from "../../config/integrations/currency.config";
 import { flightsIntegrationConfig } from "../../config/integrations/flights.config";
 import { hotelsIntegrationConfig } from "../../config/integrations/hotels.config";
+import { isSerpApiConfigured } from "./serpapi/client";
 
 export function getIntegrationStatus() {
   return {
     flights: {
       provider: flightsIntegrationConfig.provider,
-      enabled: flightsIntegrationConfig.enabled,
+      enabled: isSerpApiConfigured(),
       currency: flightsIntegrationConfig.currency,
       market: flightsIntegrationConfig.market,
       language: flightsIntegrationConfig.language,
@@ -16,7 +17,7 @@ export function getIntegrationStatus() {
     },
     hotels: {
       provider: hotelsIntegrationConfig.provider,
-      enabled: hotelsIntegrationConfig.enabled,
+      enabled: isSerpApiConfigured(),
       engine: hotelsIntegrationConfig.engine,
       currency: hotelsIntegrationConfig.currency,
       airbnbDomain: hotelsIntegrationConfig.airbnbDomain,

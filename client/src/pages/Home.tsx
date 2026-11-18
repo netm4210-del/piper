@@ -629,8 +629,17 @@ export default function Home() {
 
         <main>
           <section className="hero-section">
-            <div className="hero-copy"><div className="hero-kicker"><span /> {isHotelsPage ? "PIPER / LIVE STAY SEARCH" : "PIPER / GLOBAL TRAVEL SEARCH"}</div><HeroAnimation><h1>{isHotelsPage ? "Encontre sua hospedagem." : "Seu próximo destino está mais perto do que você imagina."}</h1></HeroAnimation><p>{isHotelsPage ? "Pesquise hotéis e hospedagens com dados, preços e links de parceiros retornados na hora." : "Compare passagens aéreas, encontre hospedagens e descubra as melhores oportunidades para viajar pelo mundo."}</p><div className="hero-proof"><span><ShieldCheck size={16} /> Pesquisa com transparência</span><span><Globe2 size={16} /> Mais de um caminho para chegar</span></div></div>
-            <div className="hero-visual"><img src="/manus-storage/async-images/0axVjx0zCz6AVrAB4druDe/image-1.webp" alt="Vista aérea de uma jornada internacional" /><div className="hero-visual-caption"><span className="caption-dot" /> Seu mapa começa aqui</div><div className="hero-route route-one"><span>GRU</span><i /><span>LIS</span></div><div className="hero-route route-two"><span>CDG</span><i /><span>HND</span></div></div>
+            <div className="hero-copy"><div className="hero-kicker"><span /> {isHotelsPage ? "PIPER / SINTA-SE EM CASA, EM QUALQUER LUGAR" : "PIPER / O MUNDO ESPERA POR VOCÊ"}</div><HeroAnimation><h1>{isHotelsPage ? "Encontre sua hospedagem." : "Seu próximo destino está mais perto do que você imagina."}</h1></HeroAnimation><p>{isHotelsPage ? "Pesquise hotéis e hospedagens com dados, preços e links de parceiros retornados na hora." : "Compare passagens aéreas, encontre hospedagens e descubra as melhores oportunidades para viajar pelo mundo."}</p><div className="hero-proof"><span><ShieldCheck size={16} /> Pesquisa com transparência</span><span><Globe2 size={16} /> Mais de um caminho para chegar</span></div></div>
+            <div className="hero-visual">
+              <img
+                src="/manus-storage/async-images/bn5xM3vLPW3u5iOGRrVjRT/image-1.webp"
+                alt="Avião sobre nuvens e uma paisagem de litoral ao pôr do sol"
+                fetchPriority="high"
+                decoding="async"
+                onError={(event) => { event.currentTarget.style.display = "none"; }}
+              />
+              <div className="hero-visual-caption"><span className="caption-dot" /> Seu mapa começa aqui</div>
+            </div>
             <div className="hero-search"><SearchAnimation><SearchPanel initialMode={isHotelsPage ? "stays" : "flights"} /></SearchAnimation></div>
           </section>
 
