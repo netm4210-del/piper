@@ -1,5 +1,3 @@
-import { createApp } from "../server/_core/app.ts";
-
-const app = createApp();
+import { app } from "./_app.js";
 
 export default app;
