@@ -75,6 +75,20 @@ function formatDate(date: string) {
   return new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "short" }).format(new Date(`${date}T12:00:00`));
 }
 
+function todayIso() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function nextDayIso(date: string) {
+  const next = new Date(`${date}T12:00:00`);
+  next.setDate(next.getDate() + 1);
+  return next.toISOString().slice(0, 10);
+}
+
 function LocationField({
   label,
   value,
@@ -525,7 +539,7 @@ function SearchPanel({ initialMode = "flights" }: { initialMode?: SearchMode }) 
                     <span className="segment-label">Trecho {String(index + 1).padStart(2, "0")}</span>
                     <LocationField label="Origem" value={segment.origin} onChange={(value) => setSegments(segments.map((item, itemIndex) => itemIndex === index ? { ...item, origin: value } : item))} icon="from" idPrefix={`segment-${index}-from`} />
                     <LocationField label="Destino" value={segment.destination} onChange={(value) => setSegments(segments.map((item, itemIndex) => itemIndex === index ? { ...item, destination: value } : item))} icon="to" idPrefix={`segment-${index}-to`} />
-                    <label className="search-field date-field"><div className="field-icon"><CalendarDays size={17} strokeWidth={1.8} /></div><span>Data</span><input type="date" value={segment.departure} onChange={(event) => setSegments(segments.map((item, itemIndex) => itemIndex === index ? { ...item, departure: event.target.value } : item))} /><b>{formatDate(segment.departure)}</b></label>
+                    <label className="search-field date-field"><div className="field-icon"><CalendarDays size={17} strokeWidth={1.8} /></div><span>Data</span><input type="date" min={todayIso()} value={segment.departure} onChange={(event) => setSegments(segments.map((item, itemIndex) => itemIndex === index ? { ...item, departure: event.target.value } : item))} /><b>{formatDate(segment.departure)}</b></label>
                   </div>
                 ))}
                 <div className="multi-segment-actions"><span>Até 2 trechos · continuação pela fonte SerpApi</span></div>
@@ -539,8 +553,8 @@ function SearchPanel({ initialMode = "flights" }: { initialMode?: SearchMode }) 
                   <LocationField label="Destino" value={destination} onChange={setDestination} icon="to" />
                 </div>
                 <div className="field-row details-row">
-                  <label className="search-field date-field"><div className="field-icon"><CalendarDays size={17} strokeWidth={1.8} /></div><span>Ida</span><input type="date" value={departure} onChange={(event) => setDeparture(event.target.value)} /><b>{formatDate(departure)}</b></label>
-                  <label className={`search-field date-field ${tripType === "oneway" ? "disabled-field" : ""}`}><div className="field-icon"><CalendarDays size={17} strokeWidth={1.8} /></div><span>Volta</span><input type="date" value={returnDate} disabled={tripType === "oneway"} onChange={(event) => setReturnDate(event.target.value)} /><b>{tripType === "oneway" ? "Não preciso" : formatDate(returnDate)}</b></label>
+                  <label className="search-field date-field"><div className="field-icon"><CalendarDays size={17} strokeWidth={1.8} /></div><span>Ida</span><input type="date" min={todayIso()} value={departure} onChange={(event) => { const value = event.target.value; setDeparture(value); if (returnDate && value >= returnDate) setReturnDate(""); }} /><b>{formatDate(departure)}</b></label>
+                  <label className={`search-field date-field ${tripType === "oneway" ? "disabled-field" : ""}`}><div className="field-icon"><CalendarDays size={17} strokeWidth={1.8} /></div><span>Volta</span><input type="date" min={departure ? nextDayIso(departure) : todayIso()} value={returnDate} disabled={tripType === "oneway"} onChange={(event) => setReturnDate(event.target.value)} /><b>{tripType === "oneway" ? "Não preciso" : formatDate(returnDate)}</b></label>
                   <PassengerPopover passengers={passengers} setPassengers={setPassengers} />
                   <label className="search-field select-field"><div className="field-icon"><Luggage size={17} strokeWidth={1.8} /></div><span>Classe</span><select value={cabin} onChange={(event) => setCabin(event.target.value as typeof cabin)}><option value="economy">Econômica</option><option value="premium_economy">Econômica Premium</option><option value="business">Executiva</option><option value="first">Primeira classe</option></select></label>
                 </div>
@@ -550,8 +564,8 @@ function SearchPanel({ initialMode = "flights" }: { initialMode?: SearchMode }) 
         ) : (
           <div className="field-row hotel-row">
             <label className="search-field text-field"><div className="field-icon"><MapPin size={17} strokeWidth={1.8} /></div><span>Destino</span><input value={city} onChange={(event) => setCity(event.target.value)} placeholder="País ou cidade" /></label>
-            <label className="search-field date-field"><div className="field-icon"><CalendarDays size={17} strokeWidth={1.8} /></div><span>Check-in</span><input type="date" value={checkIn} onChange={(event) => setCheckIn(event.target.value)} /><b>{formatDate(checkIn)}</b></label>
-            <label className="search-field date-field"><div className="field-icon"><CalendarDays size={17} strokeWidth={1.8} /></div><span>Check-out</span><input type="date" value={checkOut} onChange={(event) => setCheckOut(event.target.value)} /><b>{formatDate(checkOut)}</b></label>
+            <label className="search-field date-field"><div className="field-icon"><CalendarDays size={17} strokeWidth={1.8} /></div><span>Check-in</span><input type="date" min={todayIso()} value={checkIn} onChange={(event) => { const value = event.target.value; setCheckIn(value); if (checkOut && value >= checkOut) setCheckOut(""); }} /><b>{formatDate(checkIn)}</b></label>
+            <label className="search-field date-field"><div className="field-icon"><CalendarDays size={17} strokeWidth={1.8} /></div><span>Check-out</span><input type="date" min={checkIn ? nextDayIso(checkIn) : todayIso()} value={checkOut} onChange={(event) => setCheckOut(event.target.value)} /><b>{formatDate(checkOut)}</b></label>
             <PassengerPopover passengers={passengers} setPassengers={setPassengers} />
             <label className="search-field select-field"><div className="field-icon"><Hotel size={17} strokeWidth={1.8} /></div><span>Quartos (mín.)</span><select value={airbnbBedrooms} onChange={(event) => setAirbnbBedrooms(Number(event.target.value))}><option value={0}>Qualquer</option>{[1, 2, 3, 4, 5].map((bedroom) => <option key={bedroom} value={bedroom}>{bedroom}+</option>)}</select></label>
             <label className="search-field select-field"><div className="field-icon"><Hotel size={17} strokeWidth={1.8} /></div><span>Tipo de imóvel</span><select value={airbnbPropertyType} onChange={(event) => setAirbnbPropertyType(event.target.value as typeof airbnbPropertyType)}><option value="all">Todos</option><option value="house">Casa</option><option value="apartment">Apartamento</option><option value="guesthouse">Pousada</option><option value="hotel">Hotel</option></select></label>
@@ -650,8 +664,6 @@ export default function Home() {
           <section className="destinations-section" id="destinos"><div className="content-section"><ScrollReveal><div className="section-heading split-heading"><div><span className="eyebrow">ROTAS QUE INSPIRAM</span><h2>O mundo cabe em uma próxima busca.</h2></div><a className="text-link" href="#busca">Ver todas as rotas <ArrowUpRight size={16} /></a></div></ScrollReveal><div className="destination-grid">{destinations.map((destination, index) => <DestinationAnimation key={destination.code} className={`destination-card destination-${index + 1}`}><img src={destination.image} alt={`${destination.city}, ${destination.country}`} /><div className="destination-overlay" /><div className="destination-content"><span>{destination.eyebrow}</span><h3>{destination.city}</h3><p>{destination.country} <b>{destination.code}</b></p><a href="#busca" onClick={() => document.getElementById("busca")?.scrollIntoView({ behavior: "smooth" })}>Explorar <ArrowUpRight size={17} /></a></div></DestinationAnimation>)}</div></div></section>
 
           <section className="stays-section"><div className="content-section stays-layout"><ScrollReveal><div className="stays-copy"><span className="eyebrow">ALÉM DO VOO</span><h2>Seu endereço no destino também importa.</h2><p>Pesquise hotéis, apartamentos e experiências de hospedagem com espaço para ver localização, comodidades, políticas e condições reais.</p><a className="outline-link" href="#busca" onClick={() => document.getElementById("busca")?.scrollIntoView({ behavior: "smooth" })}>Encontrar hospedagem <ArrowRight size={16} /></a></div></ScrollReveal><ScrollReveal><div className="stay-card"><div className="stay-card-top"><div className="stay-image"><img src="/assets/lisbon.webp" alt="Hospedagem em Lisboa" /><span className="stay-badge">Pesquisa internacional</span></div><div className="stay-card-meta"><span className="eyebrow">HOSPEDAGENS</span><h3>Escolha onde a sua história continua.</h3><div className="stay-meta-row"><span><MapPin size={15} /> Cidade ou país</span><span><ShieldCheck size={15} /> Políticas visíveis</span></div></div></div><div className="stay-card-bottom"><span><Clock3 size={15} /> Disponibilidade consultada na hora</span><a href="#busca" onClick={() => document.getElementById("busca")?.scrollIntoView({ behavior: "smooth" })}>Pesquisar <ArrowRight size={15} /></a></div></div></ScrollReveal></div></section>
-
-          <section className="trust-section"><div className="content-section trust-layout"><ScrollReveal><div><span className="eyebrow">CONSTRUÍDA PARA ESCALAR</span><h2>Uma experiência premium não precisa esconder o que acontece nos bastidores.</h2></div></ScrollReveal><ScrollReveal><div className="trust-copy"><p>A PIPER está preparada para conectar fornecedores oficiais de voos, hospedagens, moeda e analytics sem misturar responsabilidades. Assim, cada integração pode evoluir sem reconstruir toda a experiência.</p><div className="trust-points"><span><span className="trust-point-mark">01</span> APIs em camadas independentes</span><span><span className="trust-point-mark">02</span> Dados sensíveis só no servidor</span><span><span className="trust-point-mark">03</span> Revalidação antes da reserva</span></div></div></ScrollReveal></div></section>
 
           <section className="faq-section" id="faq"><div className="content-section faq-layout"><ScrollReveal><div className="faq-heading"><span className="eyebrow">PRECISA DE UMA DIREÇÃO?</span><h2>As perguntas que aparecem antes da viagem.</h2><p>Se a sua dúvida não estiver aqui, fale com a equipe da PIPER.</p><a className="text-link" href="#integracoes">Ativar canal de atendimento <ArrowUpRight size={16} /></a></div></ScrollReveal><ScrollReveal><div className="faq-list">{faqs.map(([question, answer], index) => <div className={`faq-item ${openFaq === index ? "open" : ""}`} key={question}><button type="button" onClick={() => setOpenFaq(openFaq === index ? -1 : index)}><span>{question}</span><ChevronDown size={18} /></button>{openFaq === index && <p>{answer}</p>}</div>)}</div></ScrollReveal></div></section>
 
