@@ -3,7 +3,6 @@
   "buildCommand": "pnpm build",
   "outputDirectory": "public",
   "rewrites": [
-    { "source": "/api/trpc/:path*", "destination": "/api/trpc?path=:path*&input=:input" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
 }
